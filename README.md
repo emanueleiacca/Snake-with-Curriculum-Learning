@@ -25,3 +25,10 @@ python best_model.py
 ```
 
 This will start the game of Snake and display the agent's playing strategy in real time
+
+### Simulation of the agent playing
+
+https://github.com/emanueleiacca/Snake-with-Curriculum-Learning/assets/128679981/4b8d13ee-4926-486e-9fd3-66dfc2e433ac
+
+
+
