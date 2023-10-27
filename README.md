@@ -16,10 +16,12 @@ To use the agent, simply clone this repository and install the required dependen
 
 ```bash
 pip install stable-baselines3 gym snakeenv
+```
 
 Then, run the following command to start the agent:
 
 ```bash
 python best_model.py
+```
 
 This will start the game of Snake and display the agent's playing strategy in real time
