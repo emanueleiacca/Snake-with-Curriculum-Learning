@@ -3,15 +3,15 @@ import gym
 import numpy as np
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv
-from snakeenv import SnakeEnv
+from snakeenv2 import SnakeEnv
 
 # Load the best model.
-model = PPO.load("model_S_8_7_curr.zip")
-env = SnakeEnv()
+model = PPO.load("Models_trained\model_S_8_7_curr.zip")
+env = SnakeEnv(width=25, height=25)
 # Evaluate the agent's performance on a set of test episodes.
 total_reward = 0
 for i in range(100):
-    obs = env.reset()  # Reset the environment
+    obs = env.reset()  
     done = False
     while not done:
         action, _ = model.predict(obs)

@@ -37,7 +37,7 @@ class SnakeEnv(gym.Env):
     height = 400
     curriculum = 0
 
-    def __init__(self,height,width,curriculum):
+    def __init__(self,width,height):
         super(SnakeEnv, self).__init__()
         # Define action and observation space
         # They must be gym.spaces objects
