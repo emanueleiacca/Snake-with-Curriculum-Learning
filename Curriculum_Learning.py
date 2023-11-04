@@ -16,22 +16,6 @@ total_timesteps = 500000  # Total training timesteps per curriculum level
 # Define your early stopping criterion
 plateau_threshold = 50
 
-def early_stopping_criterion(scores):
-    # Check if the scores list is empty.
-    if not scores:
-        return False
-    if len(scores) == 0:
-        return False
-
-    # Calculate the mean score over the past few levels of the curriculum.
-    recent_scores = scores[-plateau_threshold:]
-    recent_mean_score = np.mean(recent_scores)
-
-    # If the mean score has not improved for the past few levels, stop training.
-    if recent_mean_score <= max(scores[:-plateau_threshold]):
-        return True
-
-    return False
 def print_training_results(scores, mean_score, highest_reward, highest_single):
     print("----------------------------------------------------")
     print(f"Scores: {scores}")
@@ -78,6 +62,9 @@ for level, (size, curriculum) in enumerate(curriculum_schedule):
         # Save the model if the agent achieves a new high score.
         if mean_score > highest_reward:
             model.save(f"model_S_{size}_{i}_curr")
+            highest_reward = mean_score
+        print_training_results(scores, mean_score, highest_reward, highest_single)
+        i += 1
             highest_reward = mean_score
         print_training_results(scores, mean_score, highest_reward, highest_single)
         if early_stopping_criterion(scores):
