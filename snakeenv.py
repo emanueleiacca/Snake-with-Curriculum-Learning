@@ -35,10 +35,11 @@ def collision_with_self(snake_position):
 class SnakeEnv(gym.Env):
     width = 400
     height = 400
-    curriculum = 0
+    curriculum = 4
 
     def __init__(self,height,width,curriculum):
         super(SnakeEnv, self).__init__()
+        self.apple_reward = 0
         # Define action and observation space
         # They must be gym.spaces objects
         # Example when using discrete actions:
@@ -49,23 +50,8 @@ class SnakeEnv(gym.Env):
 
     def step(self, action):
         self.prev_actions.append(action)
-        cv2.imshow('a',self.img)
-        cv2.waitKey(1)
         self.img = np.zeros((tableSize,tableSize,3),dtype='uint8')
-        # Display Apple
-        cv2.rectangle(self.img,(self.apple_position[0],self.apple_position[1]),(self.apple_position[0]+10,self.apple_position[1]+10),(0,0,255),3)
-        # Display Snake
-        for position in self.snake_position:
-            cv2.rectangle(self.img,(position[0],position[1]),(position[0]+10,position[1]+10),(0,255,0),3)
-        
-        # Takes step after fixed time
-        t_end = time.time() + 0.05
-        k = -1
-        while time.time() < t_end:
-            if k == -1:
-                k = cv2.waitKey(1)
-            else:
-                continue
+        self.apple_position, self.score = collision_with_apple(self.apple_position, self.score)
 
         button_direction = action
         # Change the head position based on the button direction
@@ -79,24 +65,29 @@ class SnakeEnv(gym.Env):
             self.snake_head[1] -= 10
 
 
-        apple_reward = 0
-        # Increase Snake length on eating apple
+        apple_reward = 10000
         if self.snake_head == self.apple_position:
             self.apple_position, self.score = collision_with_apple(self.apple_position, self.score)
             self.snake_position.insert(0,list(self.snake_head))
-            apple_reward = 10000
+            self.apple_reward = apple_reward
+        else:
+            self.snake_position.insert(0,list(self.snake_head))
+            self.snake_position.pop()
+
+    # Increase the reward for eating multiple apples in a row
+        if self.apple_reward > 0:
+            self.apple_reward *= 1.1
 
         else:
             self.snake_position.insert(0,list(self.snake_head))
             self.snake_position.pop()
-        
+
+        self_eating_penalty = -300
         # On collision kill the snake and print the score
         if collision_with_boundaries(self.snake_head) == 1 or collision_with_self(self.snake_position) == 1:
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            self.img = np.zeros((tableSize,tableSize,3),dtype='uint8')
-            cv2.putText(self.img,'Your Score is {}'.format(self.score),(140,250), font, 1,(255,255,255),2,cv2.LINE_AA)
-            cv2.imshow('a',self.img)
             self.done = True
+            self.reward = self_eating_penalty
+
 
         euclidean_dist_to_apple = np.linalg.norm(np.array(self.snake_head) - np.array(self.apple_position))
 
@@ -156,16 +147,3 @@ class SnakeEnv(gym.Env):
         observation = np.array(observation)
 
         return observation
-    def render(self):
-        # Create a black image.
-        img = np.zeros((self.height, self.width, 3), dtype=np.uint8)
-
-        # Draw the snake.
-        for position in self.snake_position:
-            img[position[0], position[1], :] = (0, 255, 0)
-
-        # Draw the apple.
-        img[self.apple_position[0], self.apple_position[1], :] = (0, 0, 255)
-
-        # Return the image.
-        return img
