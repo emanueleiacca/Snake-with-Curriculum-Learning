@@ -4,11 +4,11 @@ This repository contains a SnakeEnv agent trained using Stable Baselines3. The a
 
 ### Curriculum learning
 
-The agent was trained using a curriculum learning approach, which means that it was first trained on simpler boards and then gradually moved on to more difficult boards. This helped the agent to learn the basics of the game before being challenged with more complex tasks.
+The agent was trained using a curriculum learning approach, which means that it was first trained on simpler boards and then gradually moved on to more difficult boards. This helped the agent to learn the basics of the game before being challenged with more complex tasks. For the training process I decided to delete the rendering to have a more efficient code, the running time is more or less 1 hour and a half
 
 ### Performance
 
-The agent is able to achieve high scores on a variety of board sizes, including the most difficult 20x20 board. It is also able to learn to play the game with different curriculum settings, which makes it a versatile agent that can be used in a variety of research settings.
+The agent is able to achieve high scores on a variety of board sizes, including the most difficult 20x20 board. It is also able to learn to play the game with different curriculum settings, which makes it a versatile agent that can be used in a variety of research settings. 
 
 ### How to use the agent
 
@@ -25,6 +25,10 @@ python best_model.py
 ```
 
 This will start the game of Snake and display the agent's playing strategy in real time
+
+## Results
+
+Testing our Snake agent for a number of 100 iteration we achieved the best score of 18 apple eaten
 
 ### Simulation of the agent playing
 
